@@ -1,0 +1,39 @@
+services:
+  evercrow:
+    stdin_open: true
+    tty: true
+    container_name: evercrow-be
+    image: mcr.microsoft.com/devcontainers/python:3.11
+    volumes:
+      - .:/app
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    networks:
+      - evercrow
+    working_dir: /app
+    command: sh
+  ui:
+    stdin_open: true
+    tty: true
+    container_name: evercrow-fe
+    image: node:20-slim
+    volumes:
+      - .:/app
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - SERVER_PORT=3070
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+    ports:
+      - "80:3000"
+      - "3070:3070"
+    networks:
+      - evercrow
+    working_dir: /app
+    command: sh
+
+networks:
+  evercrow:
+    driver: bridge
