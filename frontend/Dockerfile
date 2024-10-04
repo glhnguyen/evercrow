@@ -8,11 +8,12 @@ WORKDIR /server
 COPY package*.json /server/
 RUN npm install
 
-FROM nginx:alpine
+FROM node:20-slim
 WORKDIR /app
-COPY ./ /app/server/
-COPY --from=client /client/build /usr/share/nginx/html
+COPY ./server/ /app/server/
+COPY --from=server /server/node_modules /app/server/node_modules/
+COPY --from=client /client/build/ /app/build
 
 EXPOSE $SERVER_PORT
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server/index.js"]
