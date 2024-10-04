@@ -14,6 +14,8 @@ COPY ./server/ /app/server/
 COPY --from=server /server/node_modules /app/server/node_modules/
 COPY --from=client /client/build/ /app/build
 
+ARG REACT_APP_BACKEND_URL
+
 EXPOSE $SERVER_PORT
 
 CMD ["node", "server/index.js"]
