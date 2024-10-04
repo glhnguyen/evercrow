@@ -2,8 +2,11 @@ services:
   evercrow:
     stdin_open: true
     tty: true
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: evercrow-be
-    image: mcr.microsoft.com/devcontainers/python:3.11
+    # image: mcr.microsoft.com/devcontainers/python:3.11
     volumes:
       - .:/app
     environment:
@@ -18,7 +21,10 @@ services:
     stdin_open: true
     tty: true
     container_name: evercrow-fe
-    image: node:20-slim
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # image: node:20-slim
     volumes:
       - .:/app
     environment:

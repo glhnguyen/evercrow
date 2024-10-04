@@ -19,7 +19,7 @@ def extract_text_and_count_birds(path: str) -> Dict[str, int]:
         pdf_path (str): The path to the PDF file to be processed.
 
     Returns:
-        Dict[str, List[str]]: A dictionary with page numbers as keys and a list of text blocks for each page.
+        Dict[str, int]: A dictionary with page numbers as keys and a list of text blocks for each page.
     """
     bird_count = defaultdict(int)
 
@@ -64,4 +64,10 @@ def extract_text_and_count_birds(path: str) -> Dict[str, int]:
             continue
 
     document.close()
-    return dict(bird_count)
+
+    existing_birds = {}
+    for bird in bird_count:
+        if bird_count[bird] != 0:
+            existing_birds[bird] = bird_count[bird]
+
+    return existing_birds

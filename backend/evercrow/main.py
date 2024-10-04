@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from extract import extract_text_and_count_birds
 import os
+import uvicorn
 
 app = FastAPI()
 
@@ -13,6 +14,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    return {'Hello': 'World'}
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)) -> dict:
@@ -50,6 +55,5 @@ async def upload_file(file: UploadFile = File(...)) -> dict:
     return JSONResponse(content=bird_counts)
 
 if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run('evercrow:app', host="0.0.0.0", port=8000,
+    uvicorn.run('main:app', host="0.0.0.0", port=8000,
                 reload=True,)

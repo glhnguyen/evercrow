@@ -5,7 +5,6 @@ const Form: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState(null);
   const [alert, setAlert] = useState(false);
-  const [errMessage, setMessage] = useState(null);
 
   const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
@@ -22,7 +21,6 @@ const Form: React.FC = () => {
       setAlert(true);
       return;
     }
-    setAlert(false);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -34,25 +32,48 @@ const Form: React.FC = () => {
       setResult(response.data);
     } catch (error) {
       setAlert(true);
+      console.log(error);
+    }
+  };
+
+  const formatResult = (result: JSON) => {
+    const output = Object.entries(result)
+      .map(
+        ([bird, count]) => `${bird[0].toUpperCase() + bird.slice(1)}: ${count}`
+      )
+      .join("\n");
+
+    if (output) {
+      return <div>{output}</div>;
+    } else {
+      return "No birds found!";
     }
   };
 
   return (
-    <div>
-      <h1>Bird Counter</h1>
+    <div className="App App-header">
+      <h1>How Many Birds Are There?</h1>
+      <h4>Check how many birds appear in your pdf file!</h4>
       <form onSubmit={handleFileUpload}>
         <input
           type="file"
           onChange={handleFileChange}
           accept="application/pdf"
         />
+        <br />
         <button type="submit">Upload and Analyze</button>
       </form>
+
+      {alert && (
+        <div>
+          <p> Error uploading pdf. Try again</p>
+        </div>
+      )}
 
       {result && (
         <div>
           <h3>Analysis Result:</h3>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
+          <pre>{formatResult(result)}</pre>
         </div>
       )}
     </div>
