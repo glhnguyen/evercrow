@@ -7,6 +7,7 @@ const Form: React.FC = () => {
   const [alert, setAlert] = useState(false);
 
   const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  console.log(apiUrl);
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +27,7 @@ const Form: React.FC = () => {
     formData.append("file", file);
 
     try {
+      console.log("GOING TO MY APIURL", apiUrl);
       const response = await axios.post(`${apiUrl}/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
