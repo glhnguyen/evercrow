@@ -52,7 +52,7 @@ async def upload_file(file: UploadFile = File(...)) -> dict:
         if os.path.exists(file_path):
             os.remove(file_path)
     
-    return JSONResponse(content=bird_counts)
+    return JSONResponse(content=bird_counts, media_type="application/json")
 
 if __name__ == '__main__':
     uvicorn.run('main:app', host="0.0.0.0", port=8000,
