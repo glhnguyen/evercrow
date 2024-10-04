@@ -27,7 +27,10 @@ const Form: React.FC = () => {
 
     try {
       const response = await axios.post(`${apiUrl}/upload`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
       });
       setResult(response.data);
     } catch (error) {
