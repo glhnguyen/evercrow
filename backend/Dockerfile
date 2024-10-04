@@ -10,4 +10,4 @@ RUN pip install --no-cache-dir --upgrade -r /evercrow/requirements.txt
 
 COPY ./evercrow ./evercrow
 
-CMD ["python", "/app/evercrow/evercrow.py"]
+CMD ["python", "/app/evercrow/main.py"]
