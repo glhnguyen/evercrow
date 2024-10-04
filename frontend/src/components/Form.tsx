@@ -21,6 +21,7 @@ const Form: React.FC = () => {
       setAlert(true);
       return;
     }
+    setAlert(false);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -73,7 +74,7 @@ const Form: React.FC = () => {
         </div>
       )}
 
-      {result && (
+      {!alert && result && (
         <div>
           <h3>Analysis Result:</h3>
           <pre>{formatResult(result)}</pre>

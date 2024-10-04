@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from extract import extract_text_and_count_birds
+from extract import extract_text_and_count_birds, get_bird_names
 import os
 import uvicorn
 
@@ -31,6 +31,8 @@ async def upload_file(file: UploadFile = File(...)) -> dict:
         Dict[str, int]: A dictionary with the count of bird names.
     """
 
+    bird_names = get_bird_names()
+
      # Ensure the uploaded file is a PDF
     if file.content_type != "application/pdf":
         raise HTTPException(status_code=400, detail="Invalid file format. Please upload a PDF.")
@@ -42,7 +44,7 @@ async def upload_file(file: UploadFile = File(...)) -> dict:
             temp_file.write(await file.read())
         
         # Extract text and count birds
-        bird_counts = extract_text_and_count_birds(file_path)
+        bird_counts = extract_text_and_count_birds(file_path, bird_names)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing the file: {e}")

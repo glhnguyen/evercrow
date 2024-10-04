@@ -1,25 +1,39 @@
 from pdf2image import convert_from_path
 import pytesseract
 import pymupdf
-from typing import Dict
+from typing import Dict, List
 from collections import defaultdict
 import re
+import os
 
-BIRD_NAMES = [
-    "crow", "sparrow", "eagle", "ostrich", "robin", "parrot", "pigeon",
-    "hawk", "falcon", "woodpecker", "dove", "finch", "swan", "pelican",
-    "penguin", "flamingo", "owl", "kingfisher", "canary", "hummingbird"
-]
+def get_bird_names() -> List[str]:
+    """
+    Extracts bird names from file and turns it into a list
 
-def extract_text_and_count_birds(path: str) -> Dict[str, int]:
+    Args:
+        path (str): The path of the txt file
+    
+    Returns:
+        List[str]: A list of bird names
+    """
+    bird_file = os.path.join(os.path.dirname(__file__), 'birds.txt')
+    with open(bird_file, "r") as file:
+        bird_names = file.read().splitlines()
+
+    generic_bird_names = [name.split()[-1].lower() for name in bird_names]
+
+    return list(set(generic_bird_names))
+
+def extract_text_and_count_birds(path: str, bird_names: List) -> Dict[str, int]:
     """
     Extracts text from a PDF and formats it into a JSON structure.
     
     Args:
-        pdf_path (str): The path to the PDF file to be processed.
+        path (str): The path to the PDF file to be processed.
+        bird_names (list): The list of bird names to sift through.
 
     Returns:
-        Dict[str, int]: A dictionary with page numbers as keys and a list of text blocks for each page.
+        Dict[str, int]: A dictionary with birds as keys and a count of birds as values.
     """
     bird_count = defaultdict(int)
 
@@ -56,7 +70,7 @@ def extract_text_and_count_birds(path: str) -> Dict[str, int]:
             page_lines = page_text.split("\n")
 
             for line in page_lines:
-                for bird in BIRD_NAMES:
+                for bird in bird_names:
                     bird_count[bird] += len(re.findall(rf"\b{bird}s?\b", line, re.IGNORECASE))
 
         except Exception as e:
